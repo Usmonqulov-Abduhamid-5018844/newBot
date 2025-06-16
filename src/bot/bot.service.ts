@@ -68,7 +68,7 @@ export class BotService {
               {
                 role: 'developer',
                 content:
-                  "Sen matematik o'qituvchisan. Har doim tushunarli misollar bilan tushuntir.",
+                  "Sen senyor developersan. Har doim tushunarli misollar bilan tushuntir.",
               },
               {
                 role: 'user',
@@ -76,7 +76,7 @@ export class BotService {
               },
             ],
           });
-          console.log(response.output_text);
+          ctx.reply(response.output_text)
         }
       } else {
         const data = await this.prismaService.user.findMany();
