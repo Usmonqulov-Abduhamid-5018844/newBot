@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
 import { BotModule } from './bot/bot.module';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { PrismaModule } from './prisma/prisma.module';
+import { session } from 'telegraf';
 
 @Module({
   imports: [TelegrafModule.forRoot({
-    token: "8005337694:AAHQdkeu_jcK_d8H5SDKcCqOel_aYuDI6b4"
+    token: String(process.env.BOT_TOKEN),
+    middlewares: [session()],
   }),
-    ConfigModule.forRoot({ envFilePath: '.env' }), BotModule, PrismaModule],
+    ConfigModule.forRoot({ envFilePath: '.env' ,isGlobal:true}), BotModule, PrismaModule],
 })
 export class AppModule {}
