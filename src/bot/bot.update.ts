@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Action, Ctx, On, Start, Update } from 'nestjs-telegraf';
+import { Action, Command, Ctx, On, Start, Update } from 'nestjs-telegraf';
 import { BotService } from './bot.service';
 import { MyContext } from 'src/helpers/bot.context';
 
@@ -16,13 +16,27 @@ export class BotUpdate {
   onChat(@Ctx() ctx: MyContext) {
     return this.botService.OnChat(ctx);
   }
-  @Action('menu')
-  onMenu(@Ctx() ctx: MyContext) {
-    return this.botService.OnMenu(ctx);
+  @Action('info')
+  onInfo(@Ctx() ctx: MyContext) {
+    return this.botService.Info(ctx);
   }
   @Action('setings')
   onSetings(@Ctx() ctx: MyContext) {
-    return this.botService.OnSetings(ctx)
+    return this.botService.OnSetings(ctx);
+  }
+
+  @Action('help')
+  onHelp(@Ctx() ctx: MyContext) {
+    return this.botService.OnHelp(ctx);
+  }
+
+  @Command('help')
+  help(@Ctx() ctx: MyContext) {
+    return this.botService.hepl(ctx);
+  }
+  @Command('menu')
+  Menue(@Ctx() ctx: MyContext) {
+    return this, this.botService.Menue(ctx);
   }
 
   @On('text')

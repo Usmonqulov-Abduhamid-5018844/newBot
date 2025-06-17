@@ -10,15 +10,9 @@ export class BotService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async Onstart(ctx: MyContext) {
+    
     try {
-      await ctx.reply(
-        `Salom ${ctx.from?.first_name} Botga xush kelibsiz 😊`,
-        Markup.inlineKeyboard([
-          [Markup.button.callback('ChatGpt', 'chat')],
-          [Markup.button.callback('Menu', 'menu')],
-          [Markup.button.callback('Setings', 'setings')],
-        ]),
-      );
+      await ctx.reply(`Salom ${ctx.from?.first_name} Botga xush kelibsiz 😊`);
       ctx.session.state = null;
       const data = await this.prismaService.user.findFirst({
         where: { chat_id: ctx.from?.id },
@@ -36,7 +30,6 @@ export class BotService {
       console.log(error.message);
     }
   }
-
   async OnChat(ctx: MyContext) {
     ctx.answerCbQuery();
     ctx.session.state = 'chat';
@@ -44,19 +37,80 @@ export class BotService {
       `Salom ${ctx.from?.first_name}  Chat GPT ga hush kelibsiz yozing...`,
     );
   }
-
-  async OnMenu(ctx: MyContext) {
-    ctx.answerCbQuery();
-    ctx.session.state = null;
-    ctx.reply('Menuga xush kelibsiz');
-  }
-
   async OnSetings(ctx: MyContext) {
     ctx.answerCbQuery();
     ctx.session.state = null;
     ctx.reply('Setings ⚙️');
   }
-
+  async OnHelp(ctx: MyContext) {
+    ctx.answerCbQuery();
+    ctx.session.state = null;
+    await ctx.reply(
+      `🤖 Yordam bo'limi:
+      
+      1. ChatGPT — sun'iy intellekt bilan suhbat qurish uchun "ChatGPT" tugmasini bosing.  
+      2. Menu — botning boshqa imkoniyatlarini ko'rish uchun "Menu" tugmasini bosing.  
+      3. Settings — til, bildirishnoma va boshqa sozlamalarni o'zgartirish uchun.  
+      4. Savollar — tez-tez beriladigan savollarga javoblar quyida:
+      
+      📌 Savol: Bu bot nima qila oladi?  
+      ➡️ Javob: Sizga har xil savollarga javob beradi, matnlar yozadi, tarjima qiladi va h.k.
+      
+      📌 Savol: ChatGPT bilan qanday suhbat quraman?  
+      ➡️ Javob: "ChatGPT" tugmasini bosing va yozishni boshlang.
+      
+      ✉️ Aloqa uchun: @Abduhamid_1852
+      `,
+    );
+  }
+  async hepl(ctx: MyContext) {
+    ctx.session.state = null;
+    await ctx.reply(
+      `🤖 Yordam bo'limi:
+      
+      1. ChatGPT — sun'iy intellekt bilan suhbat qurish uchun "ChatGPT" tugmasini bosing.  
+      2. Menu — botning boshqa imkoniyatlarini ko'rish uchun "Menu" tugmasini bosing.  
+      3. Settings — til, bildirishnoma va boshqa sozlamalarni o'zgartirish uchun.  
+      4. Savollar — tez-tez beriladigan savollarga javoblar quyida:
+      
+      📌 Savol: Bu bot nima qila oladi?  
+      ➡️ Javob: Sizga har xil savollarga javob beradi, matnlar yozadi, tarjima qiladi va h.k.
+      
+      📌 Savol: ChatGPT bilan qanday suhbat quraman?  
+      ➡️ Javob: "ChatGPT" tugmasini bosing va yozishni boshlang.
+      
+      ✉️ Aloqa uchun: @Abduhamid_1852
+      `,
+    );
+  }
+  async Info(ctx: MyContext) {
+    ctx.session.state = null;
+    try {
+      if (ctx.from) {
+        await ctx.reply(
+          `🧾  Foydalanuvchi ma'lumotlari:\n\n` +
+            `👤  Ism: ${ctx.from.first_name || "Noma'lum"}\n` +
+            `👥  Familya: ${ctx.from.last_name || "Ko'rsatilmagan"}\n` +
+            `💬  Username: @${ctx.from.username || "yo'q"}\n` +
+            `🆔  Telegram ID: ${ctx.from.id}`,
+        );
+      }
+    } catch (error) {
+      ctx.reply(`❌ Xatolik yuz berdi error: ${error.message}`);
+    }
+  }
+  async Menue(ctx: MyContext) {
+    ctx.session.state = null;
+    await ctx.reply(
+      '📋 Menue',
+      Markup.inlineKeyboard([
+        [Markup.button.callback('🧠  ChatGPT bilan suhbat', 'chat')],
+        [Markup.button.callback('📄  Info', 'info')],
+        [Markup.button.callback('🙋🏻 Hepl', 'help')],
+        [Markup.button.callback('⚙️  Setings', 'setings')],
+      ]),
+    );
+  }
   async Ontext(ctx: MyContext) {
     try {
       if (ctx.session.state === 'chat') {
@@ -68,7 +122,7 @@ export class BotService {
               {
                 role: 'developer',
                 content:
-                  "Sen senyor developersan. Har doim tushunarli misollar bilan tushuntir.",
+                  'Sen senyor developersan. Har doim tushunarli misollar bilan tushuntir.',
               },
               {
                 role: 'user',
@@ -76,7 +130,7 @@ export class BotService {
               },
             ],
           });
-          ctx.reply(response.output_text)
+          ctx.reply(response.output_text);
         }
       } else {
         const data = await this.prismaService.user.findMany();
@@ -94,10 +148,9 @@ export class BotService {
         }
       }
     } catch (error) {
-      console.log(error.message);
+      ctx.reply(`❌ Xatolik yuz berdi error: ${error.message}`);
     }
   }
-
   async OnVideo(ctx: Context) {
     try {
       const data = await this.prismaService.user.findMany();
