@@ -69,6 +69,10 @@ export class BotService {
           ctx.reply(response.output_text);
         }
       }
+    } catch (error) {
+      return ctx.reply(error.message);
+    }
+    try {
       if (ctx.session.Kurses) {
         if (ctx.message && 'text' in ctx.message) {
           let amout = parseFloat(ctx.message.text);
@@ -153,7 +157,7 @@ export class BotService {
           }
         }
       } else {
-        const data = await this.prismaService.user.findMany();
+        const data = await this.prismaService.user.findMany({});
         if (data.length) {
           if (ctx.from && ctx.from.id === 5107358906) {
             if (ctx.message && 'text' in ctx.message) {
@@ -167,9 +171,7 @@ export class BotService {
           }
         }
       }
-    } catch (error) {
-      ctx.reply(`❌ Xatolik yuz berdi error: ${error.message}`);
-    }
+    } catch (error) {}
   }
 
   async OnHelp(ctx: MyContext) {
