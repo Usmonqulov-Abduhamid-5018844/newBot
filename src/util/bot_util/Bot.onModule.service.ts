@@ -11,6 +11,7 @@ export class BotModelonModuleServoce implements OnModuleInit {
       { command: '/start', description: 'Botni boshlash' },
       { command: '/help', description: 'Yordam olish' },
       { command: '/menu', description: "Asosiy menyuni ko'rish" },
+      { command: "/ortga", description: "Ortga qaytish"}
     ]);
   }
 }
