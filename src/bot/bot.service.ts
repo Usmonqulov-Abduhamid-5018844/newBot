@@ -4,7 +4,7 @@ import { Context, Markup } from 'telegraf';
 import { MyContext } from 'src/helpers/bot.sesion';
 import OpenAI from 'openai';
 import { Kurslar } from 'src/helpers/ValutaKurs';
-const client = new OpenAI({ apiKey: process.env.CHAT_API });
+const client = new OpenAI({ apiKey: String(process.env.CHAT_API) });
 
 @Injectable()
 export class BotService {
@@ -181,7 +181,7 @@ export class BotService {
       
       1. ChatGPT — sun'iy intellekt bilan suhbat qurish uchun "ChatGPT" tugmasini bosing.  
       2. Menu — botning boshqa imkoniyatlarini ko'rish uchun "Menu" tugmasini bosing.  
-      3. Settings — til, bildirishnoma va boshqa sozlamalarni o'zgartirish uchun.  
+      3. valyuta kurslari — bu bo'limda siz valyuta kurslarini bilishingiz mumkit.  
       4. Savollar — tez-tez beriladigan savollarga javoblar quyida:
       
       📌 Savol: Bu bot nima qila oladi?  
@@ -202,7 +202,7 @@ export class BotService {
       
       1. ChatGPT — sun'iy intellekt bilan suhbat qurish uchun "ChatGPT" tugmasini bosing.  
       2. Menu — botning boshqa imkoniyatlarini ko'rish uchun "Menu" tugmasini bosing.  
-      3. Settings — til, bildirishnoma va boshqa sozlamalarni o'zgartirish uchun.  
+      3. valyuta kurslari — bu bo'limda siz valyuta kurslarini bilishingiz mumkit.  
       4. Savollar — tez-tez beriladigan savollarga javoblar quyida:
       
       📌 Savol: Bu bot nima qila oladi?  
@@ -246,15 +246,14 @@ export class BotService {
       ]),
     );
   }
-  async ortga(ctx: MyContext){
-    if(ctx.session.Kurses){
-      ctx.session.state = null
-      ctx.session.Kurses = null
-      await ctx.deleteMessage()
-      return this.onKurs(ctx)
-    }
-    else{
-      return this.Menue(ctx)
+  async ortga(ctx: MyContext) {
+    if (ctx.session.Kurses) {
+      ctx.session.state = null;
+      ctx.session.Kurses = null;
+      await ctx.deleteMessage();
+      return this.onKurs(ctx);
+    } else {
+      return this.Menue(ctx);
     }
   }
 
@@ -341,7 +340,6 @@ export class BotService {
     ctx.reply('UZS miqdorini kiriting >>> ');
   }
   //############################### KURSLAR ######################################
-
 
   async OnVideo(ctx: Context) {
     try {

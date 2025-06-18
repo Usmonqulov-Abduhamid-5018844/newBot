@@ -39,13 +39,13 @@ export class BotUpdate {
     return this.botService.OnHelp(ctx);
   }
 
-  @Command('help')
-  help(@Ctx() ctx: MyContext) {
-    return this.botService.hepl(ctx);
-  }
   @Command('menu')
   Menue(@Ctx() ctx: MyContext) {
     return this.botService.Menue(ctx);
+  }
+  @Command('help')
+  help(@Ctx() ctx: MyContext) {
+    return this.botService.hepl(ctx);
   }
   @Command("ortga")
   ortga(@Ctx() ctx: MyContext){

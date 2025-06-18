@@ -9,8 +9,8 @@ export class BotModelonModuleServoce implements OnModuleInit {
   async onModuleInit() {
     await this.bot.telegram.setMyCommands([
       { command: '/start', description: 'Botni boshlash' },
-      { command: '/help', description: 'Yordam olish' },
       { command: '/menu', description: "Asosiy menyuni ko'rish" },
+      { command: '/help', description: 'Yordam olish' },
       { command: "/ortga", description: "Ortga qaytish"}
     ]);
   }
