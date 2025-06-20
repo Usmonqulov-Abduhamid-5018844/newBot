@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Action, Command, Ctx, On, Start, Update } from 'nestjs-telegraf';
+import { Action, Command, Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
 import { BotService } from './bot.service';
 import { MyContext } from 'src/helpers/bot.sesion';
+import { takeCoverage } from 'v8';
 @Update()
 @Injectable()
 export class BotUpdate {
@@ -50,6 +51,20 @@ export class BotUpdate {
   @Command("ortga")
   ortga(@Ctx() ctx: MyContext){
     return this.botService.ortga(ctx)
+  }
+  @Hears("Menu")
+  startMenu(@Ctx() ctx: MyContext){
+    return this.botService.Menue(ctx)
+  }
+
+  @Hears("Info")
+  startInfo(@Ctx() ctx: MyContext){
+    return this.botService.Info(ctx)
+  }
+
+  @Hears("Help")
+  startHelp(@Ctx() ctx: MyContext){
+    return this.botService.hepl(ctx)
   }
 
   @On('text')

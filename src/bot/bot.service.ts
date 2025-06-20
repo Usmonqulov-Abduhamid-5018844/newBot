@@ -12,7 +12,12 @@ export class BotService {
 
   async Onstart(ctx: MyContext) {
     try {
-      await ctx.reply(`Salom ${ctx.from?.first_name} Botga xush kelibsiz 😊`);
+      await ctx.reply(
+        `Salom ${ctx.from?.first_name} Botga xush kelibsiz 😊\nBotdan foydalanish uchun quyidagi tugmalardan birini tanlayng`,
+        Markup.keyboard([['Menu', 'Info', 'Help']])
+          .resize()
+          .oneTime(),
+      );
       ctx.session.state = null;
       ctx.session.Kurses = null;
       const data = await this.prismaService.user.findFirst({
