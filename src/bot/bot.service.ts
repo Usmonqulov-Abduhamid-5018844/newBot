@@ -9,7 +9,7 @@ const client = new OpenAI({ apiKey: String(process.env.CHAT_API) });
 @Injectable()
 export class BotService {
   private Admin_id = Number(process.env.ADMIN_ID)
-  
+
   constructor(
     private readonly prismaService: PrismaService
   ) {}
@@ -38,9 +38,9 @@ export class BotService {
 
   async userAllcount(ctx: MyContext) {
     try {
-      const users = await this.prismaService.user.findMany();
+      const users = await this.prismaService.user.count();
 
-      ctx.reply(`Umumiy foydalanuvchilar soni ${users.length} ta`);
+      ctx.reply(`Umumiy foydalanuvchilar soni ${users} ta`);
     } catch (error) {
       ctx.reply(error.message);
     }
