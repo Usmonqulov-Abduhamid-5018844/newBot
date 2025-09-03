@@ -210,7 +210,7 @@ export class BotService {
       
       1. ChatGPT — sun'iy intellekt bilan suhbat qurish uchun "ChatGPT" tugmasini bosing.  
       2. Menu — botning boshqa imkoniyatlarini ko'rish uchun "Menu" tugmasini bosing.  
-      3. valyuta kurslari — bu bo'limda siz valyuta kurslarini bilishingiz mumkit.  
+      3. valyuta kurslari — bu bo'limda siz valyuta kurslarini bilishingiz munkin.  
       4. Savollar — tez-tez beriladigan savollarga javoblar quyida:
       
       📌 Savol: Bu bot nima qila oladi?  
