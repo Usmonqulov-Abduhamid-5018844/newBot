@@ -8,12 +8,53 @@ const client = new OpenAI({ apiKey: String(process.env.CHAT_API) });
 
 @Injectable()
 export class BotService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private Admin_id = Number(process.env.ADMIN_ID),
+    private readonly prismaService: PrismaService
+  ) {}
+
+  async onAdminstart(ctx: MyContext) {
+    try {
+      const from = ctx.from;
+      const name =
+        from && from.first_name && from.first_name.length > 5
+          ? from.first_name
+          : 'Hurmatli foydalanuvchi';
+
+      await ctx.reply(
+        `Salom ${name}! Botga xush kelibsiz 😊\nBotdan foydalanish uchun quyidagi tugmalardan birini tanlang`,
+        Markup.keyboard([
+          ['Menu', 'Info', 'Help'],
+          ['Barcha foydalanuvchilar soni'],
+        ])
+          .resize()
+          .oneTime(),
+      );
+    } catch (error) {
+      ctx.reply(error.message);
+    }
+  }
+
+  async userAllcount(ctx: MyContext) {
+    try {
+      const users = await this.prismaService.user.findMany();
+
+      ctx.reply(`Umumiy foydalanuvchilar soni ${users.length} ta`);
+    } catch (error) {
+      ctx.reply(error.message);
+    }
+  }
 
   async Onstart(ctx: MyContext) {
     try {
+      const from = ctx.from;
+      const name =
+        from && from.first_name && from.first_name.length > 5
+          ? from.first_name
+          : 'Hurmatli foydalanuvchi';
+
       await ctx.reply(
-        `Salom ${ctx.from?.first_name} Botga xush kelibsiz 😊\nBotdan foydalanish uchun quyidagi tugmalardan birini tanlayng`,
+        `Salom ${name}! Botga xush kelibsiz 😊\nBotdan foydalanish uchun quyidagi tugmalardan birini tanlang`,
         Markup.keyboard([['Menu', 'Info', 'Help']])
           .resize()
           .oneTime(),
@@ -23,7 +64,7 @@ export class BotService {
       const data = await this.prismaService.user.findFirst({
         where: { chat_id: ctx.from?.id },
       });
-      if (!data && ctx.from?.is_bot == false && ctx.from.id != 5107358906) {
+      if (!data && ctx.from?.is_bot == false && ctx.from.id != this.Admin_id) {
         let newuser = {
           chat_id: ctx.from.id,
           first_name: ctx.from.first_name,
@@ -46,12 +87,6 @@ export class BotService {
     );
   }
 
-  // async OnSetings(ctx: MyContext) {
-  //   ctx.answerCbQuery();
-  //   ctx.session.state = null;
-  //   ctx.reply('Setings ⚙️');
-
-  // }
   async Ontext(ctx: MyContext) {
     try {
       if (ctx.session.state === 'chat') {
@@ -161,20 +196,6 @@ export class BotService {
               break;
           }
         }
-      } else {
-        const data = await this.prismaService.user.findMany({});
-        if (data.length) {
-          if (ctx.from && ctx.from.id === 5107358906) {
-            if (ctx.message && 'text' in ctx.message) {
-              for (let user of data) {
-                ctx.telegram.sendMessage(
-                  user.chat_id.toString(),
-                  `Bu ${ctx.from.first_name} dan kelgan xabar ${ctx.message.text}`,
-                );
-              }
-            }
-          }
-        }
       }
     } catch (error) {}
   }
@@ -249,7 +270,6 @@ export class BotService {
         [Markup.button.callback('📄  Info', 'info')],
         [Markup.button.callback('🙋🏻  Hepl', 'help')],
         [Markup.button.callback('💵  Valyuta kurslari', 'kurs')],
-        // [Markup.button.callback('⚙️  Setings', 'setings')],
       ]),
     );
   }

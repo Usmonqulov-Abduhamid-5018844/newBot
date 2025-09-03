@@ -2,16 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { Action, Command, Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
 import { BotService } from './bot.service';
 import { MyContext } from 'src/helpers/bot.sesion';
-import { takeCoverage } from 'v8';
 @Update()
 @Injectable()
 export class BotUpdate {
-  constructor(private readonly botService: BotService,
+  constructor(
+    private Admin_id = Number(process.env.ADMIN_ID),
+    private readonly botService: BotService,
   ) {}
 
   @Start()
   onstart(@Ctx() ctx: MyContext) {
-    return this.botService.Onstart(ctx);
+    if(ctx.from?.id === this.Admin_id){
+      return this.botService.onAdminstart(ctx)
+    }
+    else{
+      return this.botService.Onstart(ctx);
+    }
   }
   @Action('chat')
   onChat(@Ctx() ctx: MyContext) {
@@ -23,11 +29,7 @@ export class BotUpdate {
     ctx.deleteMessage()
     return this.botService.Info(ctx);
   }
-  // @Action('setings')
-  // onSetings(@Ctx() ctx: MyContext) {
-  //   ctx.deleteMessage()
-  //   return this.botService.OnSetings(ctx);
-  // }
+
   @Action("kurs")
   onKurs(@Ctx() ctx: MyContext){
     ctx.deleteMessage()
@@ -55,6 +57,11 @@ export class BotUpdate {
   @Hears("Menu")
   startMenu(@Ctx() ctx: MyContext){
     return this.botService.Menue(ctx)
+  }
+
+  @Hears("Barcha foydalanuvchilar soni")
+  foydalanuvchilar(@Ctx() ctx: MyContext) {
+    return this.botService.userAllcount(ctx)
   }
 
   @Hears("Info")
