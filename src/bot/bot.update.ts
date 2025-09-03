@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Action, Command, Ctx, Hears, On, Start, Update } from 'nestjs-telegraf';
 import { BotService } from './bot.service';
 import { MyContext } from 'src/helpers/bot.sesion';
+
 @Update()
 @Injectable()
 export class BotUpdate {
