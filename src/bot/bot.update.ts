@@ -5,14 +5,15 @@ import { MyContext } from 'src/helpers/bot.sesion';
 @Update()
 @Injectable()
 export class BotUpdate {
+  private Admin_id = Number(process.env.ADMIN_ID)
+  
   constructor(
-    private Admin_id = Number(process.env.ADMIN_ID),
     private readonly botService: BotService,
   ) {}
 
   @Start()
   onstart(@Ctx() ctx: MyContext) {
-    if(ctx.from?.id === this.Admin_id){
+    if(ctx.from?.id == this.Admin_id){
       return this.botService.onAdminstart(ctx)
     }
     else{

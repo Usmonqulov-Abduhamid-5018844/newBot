@@ -8,8 +8,9 @@ const client = new OpenAI({ apiKey: String(process.env.CHAT_API) });
 
 @Injectable()
 export class BotService {
+  private Admin_id = Number(process.env.ADMIN_ID)
+  
   constructor(
-    private Admin_id = Number(process.env.ADMIN_ID),
     private readonly prismaService: PrismaService
   ) {}
 
